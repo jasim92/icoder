@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+        integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <title>{% block title %}{% endblock title %}</title>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="/">iCoder</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item {% block homeactive %}{% endblock homeactive %}">
+                    <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item {% block aboutactive %}{% endblock aboutactive %}">
+                    <a class="nav-link" href="/about">About</a>
+                </li>
+                <li class="nav-item {% block blogactive %}{% endblock blogactive %}">
+                    <a class="nav-link" href="/blog">Blog</a>
+                </li>
+                </li>
+                <li class="nav-item {% block contactactive %}{% endblock contactactive %}">
+                    <a class="nav-link" href="/contact">Contact</a>
+                </li>
+            </ul>
+            <form class="form-inline my-2 my-lg-0" action="/search" method="get">
+                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" id="query"
+                    name="query">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+            </form>
+            {% if user.is_authenticated %}
+
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="false">
+                    Welcome {{request.user}}
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="/logout">Logout</a>
+                </div>
+            </li>
+            {% else %}
+
+            <!-- Button trigger for signup modal -->
+            <button type="button" class="btn btn-outline-success ml-2" data-toggle="modal" data-target="#signupModal">
+                Sign Up
+            </button>
+            <!-- Button trigger for signup modal -->
+            <button type="button" class="btn btn-outline-success ml-2" data-toggle="modal" data-target="#signinModal">
+                Sign In
+            </button>
+
+            {% endif %}
+        </div>
+    </nav>
+    <!-- this is for messages dissmissal bar -->
+    {% for message in messages %}
+    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+        <strong>Message: </strong>{{ message }}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    {% endfor %}
+    <!-- ------------------------------------------------- -->
+    <!--SignUp  Modal Start From Here -->
+    <div class="modal fade" id="signupModal" tabindex="-1" aria-labelledby="signupModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="signupModalTitle">Sign Up Here</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="signup/" method="POST"> {% csrf_token %}
+                        <div class="form-group">
+                            <label for="username">User Name</label>
+                            <input type="text" class="form-control" id="username"
+                                placeholder="choose unique username (alpha numeric)" name="username" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="fname">First Name</label>
+                            <input type="text" class="form-control" id="fname" placeholder="First Name" name="fname"
+                                required>
+                        </div>
+                        <div class="form-group">
+                            <label for="lname">Last Name</label>
+                            <input type="text" class="form-control" id="lname" placeholder="Last Name" name="lname"
+                                required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email address</label>
+                            <input type="email" class="form-control" id="email" placeholder="name@example.com"
+                                name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="pass1">Password</label>
+                            <input type="password" class="form-control" id="pass1" name="pass1" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="pass2">Re-Enter Password</label>
+                            <input type="password" class="form-control" id="pass2" name="pass2" required>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Sign Up</button>
+                        </div>
+                        {% csrf_token %}
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!-- ------------------------------------------------- -->
+    <!--Sign IN  Modal Start From Here -->
+    <div class="modal fade" id="signinModal" tabindex="-1" aria-labelledby="signinModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="signinModalTitle">Sign In Here</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="login/" method="POST">{% csrf_token %}
+                        <div class="form-group">
+                            <label for="loginusername">User Name</label>
+                            <input type="text" class="form-control" id="loginusername" placeholder="loginusername"
+                                name="loginusername" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="loginpassword">Password</label>
+                            <input type="password" class="form-control" id="loginpassword" name="loginpassword"
+                                required>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Sign In</button>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% block body %}
+    {% endblock %}
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous">
+        </script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+        integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous">
+        </script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+        integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous">
+        </script>
+</body>
+
+</html>
+{% block js %}
+{% endblock %}

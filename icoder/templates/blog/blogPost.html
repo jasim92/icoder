@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+{% block title %} BlogPost -iCoder {% endblock title %}
+{% load humanize %}
+{% load extras %}
+{% block body %}
+<div class="container col-lg-6 my-3">
+    <h2 class="blog-post-title">{{post.title}}</h2>
+    <p class="blog-post-meta">{{post.timestamp}} by <a href="#">{{post.author}}</a></p>
+    <div id="thumbnail" name="thumbnail">
+        <img src="/media/{{post.thumbnail}}" class="bd-placeholder-img" aria-label="Placeholder: Thumbnail">
+    </div>
+    <p class="my-3"><div class="preview">{{post.content|safe|truncatechars:500}}</div></p>
+</div>
+<div class="container col-lg-6 my-3">
+    <h2>Comments ({{comments.count}})</h2>
+    {% if user.is_authenticated %}
+    <form action="/blog/postComments" method="POST">{% csrf_token %}
+        <div class="form-group">
+            <label for="comment">Post Comments</label>
+            <input type="text" class="form-control" id="comment" name="comment" placeholder="Write Comment Here">
+        </div>
+        <input type="hidden" name="postSno" value="{{post.sno}}">
+        <input type="hidden" name="parentSno" value="">
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+    {% else %}
+    <p> Please Log in to post a Comment. </p>
+    {% endif %}
+    {% for comment in comments %}
+    <div class="row border border-dark mx-0 my-3">
+        <div class="col-md-1"><img src="/media/images/usr.png" height="55px" width="55px"></div>
+
+        <div class="col-md-11"><b> {{comment.user.username}} </b>
+            <span class="badge badge-secondary">{{comment.timestamp | naturaltime}}</span>
+            <!--this will show time in 2 hours ago or x hour ago like-->
+
+            <div>
+                <p class="font-italic">{{comment.comment}}</p>
+            </div>
+            <div class="reply mx-0">
+                <p>
+                    {% if user.is_authenticated %}
+                    <button class="btn btn-primary btn-sm" type="button" data-toggle="collapse"
+                        data-target="#replyBox{{comment.sno}}" aria-expanded="false" aria-controls="collapseExample">
+                        reply
+                    </button>
+                </p>
+                <div class="collapse" id="replyBox{{comment.sno}}">
+                    <div class="card card-body mb-2">
+                        <form action="/blog/postComments" method="POST">{% csrf_token %}
+                            <div class="form-group">
+                                <label for="comment">Post a Reply</label>
+                                <input type="text" class="form-control" id="comment" name="comment"
+                                    placeholder="Write a reply Here">
+                                <input type="hidden" name="parentSno" value="{{comment.sno}}">
+                            </div>
+                            <input type="hidden" name="postSno" value="{{post.sno}}">
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </form>
+                    </div>
+                </div>
+                {% endif %}
+                <div class="replies my-2">
+                    {% for reply in replyDict|get_val:comment.sno %}
+                    <!-- this will return replies associated with comment.sno in the replyDict[] -->
+                    <div class="row my-2">
+                        <div class="col-md-1"><img src="/media/images/usr.png" height="35px" width="35px"></div>
+
+                        <div class="col-md-11">
+                            <b> {{comment.user.username}} </b><span
+                                class="badge badge-secondary">{{comment.timestamp | naturaltime}}</span>
+
+                            <div>{{reply.comment}}</div>
+                        </div>
+                        <br>
+                    </div>
+                    {% endfor %}
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% endfor %}
+</div>
+{% endblock %}
+<script>
+    let preview = document.getElementsByClassName('preview')
+    Array.from(preview).forEach((element)=>{
+        element.innerHTML = element.innerText
+    })
+</script>
