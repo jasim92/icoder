@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'home',
     'blog',
-    'django.contrib.humanize'
+    'django.contrib.humanize',
 
 ]
 
@@ -127,3 +127,7 @@ MESSAGE_TAGS = {
 }
 MEDIA_ROOT = os.path.join(BASE_DIR,'media')
 MEDIA_URL = '/media/'
+
+STATICFILES_DIRS = [
+   "static/",
+]

@@ -9,7 +9,7 @@
     <div id="thumbnail" name="thumbnail">
         <img src="/media/{{post.thumbnail}}" class="bd-placeholder-img" aria-label="Placeholder: Thumbnail">
     </div>
-    <p class="my-3"><div class="preview">{{post.content|safe|truncatechars:500}}</div></p>
+    <p class="my-3">{{post.content|safe}}</p>
 </div>
 <div class="container col-lg-6 my-3">
     <h2>Comments ({{comments.count}})</h2>
@@ -67,8 +67,8 @@
                         <div class="col-md-1"><img src="/media/images/usr.png" height="35px" width="35px"></div>
 
                         <div class="col-md-11">
-                            <b> {{comment.user.username}} </b><span
-                                class="badge badge-secondary">{{comment.timestamp | naturaltime}}</span>
+                            <b> {{reply.user.username}} </b><span
+                                class="badge badge-secondary">{{reply.timestamp | naturaltime}}</span>
 
                             <div>{{reply.comment}}</div>
                         </div>
@@ -84,9 +84,3 @@
     {% endfor %}
 </div>
 {% endblock %}
-<script>
-    let preview = document.getElementsByClassName('preview')
-    Array.from(preview).forEach((element)=>{
-        element.innerHTML = element.innerText
-    })
-</script>

@@ -4,30 +4,50 @@
 
 {% block homeactive %} active {% endblock homeactive %}
 
-{% block body %}
-<div class="col-lg-8 offset-lg-2 my-2">
-<div class="jumbotron">
-  <h1 class="display-4">iCoder</h1>
-  <p class="lead">This is a simple hero unit, a simple jumbotron-style component for calling extra attention to featured content or information.</p>
-  <hr class="my-4">
-  <p>It uses utility classes for typography and spacing to space content out within the larger container.</p>
-  <a class="btn btn-primary btn-lg" href="/blog" role="button">Go To Blog</a>
-</div>
+.col-lg-6{
+max-width:75
+}
 
-<div>
-	<h2>Popular Posts</h2>
-      <div class="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
-        <div class="col p-4 d-flex flex-column position-static">
-          <strong class="d-inline-block mb-2 text-primary">World</strong>
-          <h3 class="mb-0">Featured post</h3>
-          <div class="mb-1 text-muted">Nov 12</div>
-          <p class="card-text mb-auto">This is a wider card with supporting text below as a natural lead-in to additional content.</p>
-          <a href="/blogpost" class="stretched-link">Continue reading</a>
+
+{% block body %}
+<div class="col-lg-8 offset-lg-2 my-2 ">
+  <div class="jumbotron">
+    <h1 class="display-4">iCoder</h1>
+    <p class="lead">This is a Technology Blog where you can get some technical news of linux operating system and open
+      source applications. For latest Linux updates visit this space</p>
+    <hr class="my-4">
+    <p>This Blog is fully built in HTML, Bootstrap and Django.</p>
+    <a class="btn btn-primary btn-lg" href="/blog" role="button">Go To Blog</a>
+  </div>
+
+  <div>
+    <h2>Latest Posts</h2>
+
+  </div>
+  {% for post in allPost %}
+  <div class="container col-lg-8 my-2 ">
+
+    <div class="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+      <div class="col p-4 d-flex flex-column position-static">
+        <strong class="d-inline-block mb-2 text-primary">{{post.region}}</strong>
+        <h3 class="mb-0">{{post.title}}</h3>
+        <div class="mb-1 text-muted">{{post.timestamp}}<p> by: {{post.author}}</p>
         </div>
-        <div class="col-auto d-none d-lg-block">
-          <svg class="bd-placeholder-img" width="200" height="250" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: Thumbnail"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
+        <p class="card-text mb-auto">
+          <div class="preview">{{post.content|safe|truncatechars:50}}</div>
+        </p>
+        <div class="mt-2">
+          <a href="/blog/{{post.slug}}"><button type="button" class="btn btn-primary">Continue reading</button></a>
         </div>
       </div>
+      <div class="col-auto d-none d-lg-block" id="thumbnail" name="thumbnail">
+        <img src="/media/{{post.thumbnail}}" class="bd-placeholder-img" width="200" height="250"
+          aria-label="Placeholder: Thumbnail">
+        <title>Placeholder</title>
+      </div>
+
     </div>
-    </div>
-{% endblock %}
+
+  </div>
+  {% endfor %}
+  {% endblock %}

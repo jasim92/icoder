@@ -4,6 +4,8 @@ from django.contrib import messages
 from blog.models import Post
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
+from django.utils import timezone
+
 
 # from icoder.blog.models import Post
 # Create your views here.3
@@ -11,7 +13,10 @@ from django.contrib.auth import authenticate, login, logout
 
 
 def home(request):
-    return render(request, 'home/home.html')
+    allPost = Post.objects.filter(timestamp__lte=timezone.now()).order_by('timestamp').reverse()[:3] 
+    # This line only show latest 3 posts
+    context = {'allPost':allPost}
+    return render(request, 'home/home.html', context)
 
 def about(request):
     return render(request, 'home/about.html')

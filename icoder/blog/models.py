@@ -24,6 +24,9 @@ class BlogComment(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
     parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True) #it is pointing the value of blogcomment so we use 'self'
     timestamp = models.DateTimeField(default=now)
+    replytimestamp = models.DateTimeField(default=now)
+
+    
 
     def __str__(self):
         return self.comment[0:10] + "..." + "by " + self.user.username
